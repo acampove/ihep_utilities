@@ -1,0 +1,17 @@
+[project]
+name        = 'ihep_utilities'
+version     = '0.0.1'
+readme      = 'README.md'
+dependencies= []
+
+[project.optional-dependencies]
+dev  = ['pytest']
+
+[tools.setuptools.packages.find]
+where   = ['src']
+
+[tool.setuptools]
+script-files=[
+'src/ihep_utilities_scripts/submit_run_commands',
+'src/ihep_utilities_scripts/job_run_commands',
+]
