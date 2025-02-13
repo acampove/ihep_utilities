@@ -22,3 +22,13 @@ run_calculation -i 3
 
 would run in parallel `run_calculation` for different arguments. The flag `-e`
 specifies the virtual environment where this needs to be executed.
+
+## Modify memory from jobs that are held
+
+To modify the amount of memory used by the held jobs and release them do:
+
+```bash
+jmanager -m 8000 -t 0
+```
+
+`-t 1` will do a test run.
