@@ -10,6 +10,9 @@ dev  = ['pytest']
 [tools.setuptools.packages.find]
 where   = ['src']
 
+[project.scripts]
+jmanager ='ihep_utilities_scripts.jmanager:main'
+
 [tool.setuptools]
 script-files=[
 'src/ihep_utilities_scripts/submit_run_commands',
