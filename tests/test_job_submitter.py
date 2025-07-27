@@ -2,6 +2,7 @@
 Script holding functions that test JobSubmitter class
 '''
 import os
+from ihep_utilities import JobSubmitter
 
 # ----------------------
 class Data:
@@ -9,7 +10,9 @@ class Data:
     Class meant to be used to share attributes
     '''
     user    = os.environ['USER']
-    out_dir = f'/tmp/{user}/ihep_utilities/tests'
+    out_dir = f'/tmp/{user}/tests/ihep_utilities'
+
+    os.makedirs(out_dir, exist_ok=True)
 # ----------------------
 def _get_path(kind : str) -> str:
     '''
