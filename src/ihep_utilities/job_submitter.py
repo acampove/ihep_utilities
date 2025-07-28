@@ -5,6 +5,8 @@ Module holding JobSubmitter class
 import os
 import shutil
 import subprocess
+from datetime import datetime
+
 from dmu.logging.log_store import LogStore
 
 log=LogStore.add_logger('ihep_utilities:job_submitter')
@@ -154,6 +156,17 @@ class JobSubmitter:
 
         log.error(f'Job[{name}]: {result.stderr}')
     # ----------------------
+    def _get_job_date(self) -> str:
+        '''
+        Returns
+        -------------
+        Date where this job was ran. Meant to be used for naming files
+        '''
+        now  = datetime.now()
+        date = now.strftime('%Y_%m_%d_%H_%M_%S')
+
+        return date
+    # ----------------------
     def run(self, skip_submit : bool = False) -> None:
         '''
         Runs the submission of the job(s)
@@ -162,9 +175,10 @@ class JobSubmitter:
         ---------------
         skip_submit : If True, it will do everything but submission, needed for dry runs and tests
         '''
+        job_date = self._get_job_date()
 
         for kind, l_command in self._jobs.items():
-            job_dir = f'{JobSubmitter._log_root}/{kind}'
+            job_dir = f'{JobSubmitter._log_root}/{kind}/{job_date}'
             os.makedirs(job_dir, exist_ok=True)
             os.chdir(job_dir)
 
