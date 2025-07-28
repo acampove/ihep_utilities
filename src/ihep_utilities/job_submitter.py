@@ -113,13 +113,14 @@ class JobSubmitter:
 
         l_arg = [
             'hep_sub',
-            '-g    lhcb',
-            f'-n   {njob}',
-            f'-e   {name}.err',
-            f'-o   {name}.out',
-            f'-wt  {self._queue}',
-            f'-argu "%{{ProcId}} {path} {self._environment}"',
-            f'-mem {self._memory} submit_run_commands']
+            '-g',     'lhcb',
+            '-n',    f'{njob}',
+            '-e',    f'{name}.err',
+            '-o',    f'{name}.out',
+            '-wt',   f'{self._queue}',
+            '-argu', f'"%{{ProcId}} {path} {self._environment}"',
+            '-mem' , f'{self._memory}',
+            'submit_run_commands']
 
         if skip_submit:
             log.warning('Skipping job submission')
