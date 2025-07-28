@@ -46,6 +46,6 @@ def test_simple() -> None:
     }
     log.info('')
 
-    sbt = JobSubmitter(jobs=d_job, environment='None')
+    sbt = JobSubmitter(jobs=d_job, environment='rx')
     sbt.run(skip_submit=_skip_submission())
 # ----------------------
