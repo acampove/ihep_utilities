@@ -3,6 +3,7 @@ Module holding JobSubmitter class
 '''
 
 import os
+import shutil
 import subprocess
 from dmu.logging.log_store import LogStore
 
@@ -34,6 +35,8 @@ class JobSubmitter:
         self._environment = environment
         self._memory      = 4000
         self._queue       = 'mid'
+        self._submitter_command = 'submit_run_commands'
+
         self._tmp_dir     = self._get_tmp_dir()
     # ----------------------
     def _get_tmp_dir(self) -> str:
@@ -96,6 +99,18 @@ class JobSubmitter:
 
         return fpath
     # ----------------------
+    def _get_submit_script(self) -> str:
+        '''
+        Returns
+        -------------
+        Path to submit_run_commands, which is the script that will run the job
+        '''
+        submit_path = shutil.which(self._submitter_command)
+        if submit_path is None:
+            raise FileNotFoundError('Cannot find {self._submitter_command}')
+
+        return submit_path
+    # ----------------------
     def _submit_job(
         self,
         name        : str,
@@ -110,6 +125,7 @@ class JobSubmitter:
         '''
         path  = self._make_job_file(name=name, commands=commands)
         njob  = len(commands)
+        submit_script = self._get_submit_script()
 
         l_arg = [
             'hep_sub',
@@ -120,7 +136,7 @@ class JobSubmitter:
             '-wt',   f'{self._queue}',
             '-argu', f'"%{{ProcId}} {path} {self._environment}"',
             '-mem' , f'{self._memory}',
-            'submit_run_commands']
+            submit_script]
 
         if skip_submit:
             log.warning('Skipping job submission')
