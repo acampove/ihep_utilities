@@ -109,6 +109,8 @@ class JobSubmitter:
         if submit_path is None:
             raise FileNotFoundError('Cannot find {self._submitter_command}')
 
+        log.debug(f'Using submitter from: {submit_path}')
+
         return submit_path
     # ----------------------
     def _submit_job(
