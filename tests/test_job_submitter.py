@@ -14,28 +14,18 @@ class Data:
 
     os.makedirs(out_dir, exist_ok=True)
 # ----------------------
-def _get_path(kind : str) -> str:
+def _skip_submission() -> bool:
     '''
-    Parameters
-    -------------
-    kind: Type of job submission
-
     Returns
     -------------
-    Path to text file with commands to run as jobs
+    True if not in IHEP
     '''
-    l_command = []
-    if kind == 'echo':
-        l_command.append('echo 1')
-        l_command.append('echo 2')
-        l_command.append('echo 3')
+    host_name = os.environ['HOSTNAME']
 
-    data = '\n'.join(l_command)
-    path = f'{Data.out_dir}/{kind}.txt'
-    with open(path, 'w', encoding='utf-8') as ofile:
-        ofile.write(data)
+    if 'ihep.ac.cn' in host_name:
+        return False
 
-    return path
+    return True
 # ----------------------
 def test_simple() -> None:
     '''
@@ -47,7 +37,11 @@ def test_simple() -> None:
     -------------
     None
     '''
-    path = _get_path(kind='echo')
+    d_job = {
+        'j1' : ['echo 1', 'echo 2', 'echo 3'],
+        'j2' : ['echo a', 'echo b', 'echo c'],
+    }
 
-    sbt = JobSubmitter(path=path, environment='None')
-    sbt.run() 
+    sbt = JobSubmitter(jobs=d_job, environment='None')
+    sbt.run(skip_submit=_skip_submission())
+# ----------------------
