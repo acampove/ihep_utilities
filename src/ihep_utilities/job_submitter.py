@@ -81,18 +81,21 @@ class JobSubmitter:
 
         log.debug(f'All jobs will do {njob} subjobs')
     # ----------------------
-    def _make_job_file(self, name : str, commands : list[str]) -> str:
+    def _make_job_file(
+        self,
+        job_dir  : str,
+        commands : list[str]) -> str:
         '''
         Parameters
         -------------
-        name : Job identifier, e.g. process_trees
+        job_dir : Directory where log files and command file will go
         commands: List of commands needed to do job
 
         Returns
         -------------
         Path to text file containing these commands
         '''
-        fpath = f'{self._tmp_dir}/{name}.txt'
+        fpath = f'{job_dir}/commands.txt'
         data  = '\n'.join(commands)
         with open(fpath, 'w', encoding='utf-8') as ofile:
             ofile.write(data)
@@ -118,16 +121,18 @@ class JobSubmitter:
     def _submit_job(
         self,
         name        : str,
+        job_dir     : str,
         commands    : list[str],
         skip_submit : bool = False) -> None:
         '''
         Parameters
         -------------
         name        : Name of job, e.g. process_trees
+        job_dir     : Directory where logfiles and command files will go
         commands    : List of commands to do the job
         skip_submit : If True, it will do everything but submission, needed for dry runs and tests
         '''
-        path  = self._make_job_file(name=name, commands=commands)
+        path  = self._make_job_file(job_dir=job_dir, commands=commands)
         njob  = len(commands)
         submit_script = self._get_submit_script()
 
