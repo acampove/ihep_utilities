@@ -185,9 +185,10 @@ class JobSubmitter:
             log.debug(f'Job directory: {job_dir}')
 
             self._submit_job(
-                skip_submit=skip_submit,
-                name       =kind,
-                commands   =l_command)
+                job_dir    = job_dir,
+                skip_submit= skip_submit,
+                name       = kind,
+                commands   = l_command)
 
         log.info('Submission finished')
 # -----------------------------
