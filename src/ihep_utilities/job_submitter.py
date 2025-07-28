@@ -46,6 +46,8 @@ class JobSubmitter:
         tmp_dir = f'/tmp/{user}/ihep_jobs'
         os.makedirs(tmp_dir, exist_ok=True)
 
+        log.debug(f'Using temporary directory: {tmp_dir}')
+
         return tmp_dir
     # ----------------------
     def _validate_jobs(self, jobs : dict[str,list[str]]) -> None:
@@ -54,6 +56,8 @@ class JobSubmitter:
         -------------
         jobs : Dictionary with keys as job identifiers and values as list of commands
         '''
+        log.debug('Validating jobs')
+
         if len(jobs) == 0:
             raise ValueError('No jobs found')
 
@@ -69,6 +73,8 @@ class JobSubmitter:
 
             if njob != this_njob:
                 log.warning(f'Number of commands vary between jobs {njob} -> {this_njob}')
+
+        log.debug(f'All jobs will do {njob} subjobs')
     # ----------------------
     def _make_job_file(self, name : str, commands : list[str]) -> str:
         '''
@@ -85,6 +91,8 @@ class JobSubmitter:
         data  = '\n'.join(commands)
         with open(fpath, 'w', encoding='utf-8') as ofile:
             ofile.write(data)
+
+        log.debug(f'Using commands file: {fpath}')
 
         return fpath
     # ----------------------
@@ -117,6 +125,7 @@ class JobSubmitter:
             log.warning('Skipping job submission')
             return
 
+        log.info(f'Submitting: {name}')
         result = subprocess.run(l_arg, capture_output=True, text=True, check=False)
 
         log.info(f'Job[{name}]: {result.stdout}')
@@ -143,4 +152,6 @@ class JobSubmitter:
                 skip_submit=skip_submit,
                 name       =kind,
                 commands   =l_command)
+
+        log.info('Submission finished')
 # -----------------------------
