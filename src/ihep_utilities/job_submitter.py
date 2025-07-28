@@ -127,6 +127,7 @@ class JobSubmitter:
             return
 
         log.info(f'Submitting: {name}')
+        log.debug(f'Using args: {l_arg}')
         result = subprocess.run(l_arg, capture_output=True, text=True, check=False)
 
         log.info(f'Job[{name}]: {result.stdout}')
@@ -148,6 +149,8 @@ class JobSubmitter:
             job_dir = f'{JobSubmitter._log_root}/{kind}'
             os.makedirs(job_dir, exist_ok=True)
             os.chdir(job_dir)
+
+            log.debug(f'Job directory: {job_dir}')
 
             self._submit_job(
                 skip_submit=skip_submit,
