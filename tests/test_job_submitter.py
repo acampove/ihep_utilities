@@ -4,6 +4,9 @@ Script holding functions that test JobSubmitter class
 import os
 from ihep_utilities import JobSubmitter
 
+from dmu.logging.log_store import LogStore
+
+log=LogStore.add_logger('ihep_utilities:test_job_submitter')
 # ----------------------
 class Data:
     '''
@@ -41,6 +44,7 @@ def test_simple() -> None:
         'j1' : ['echo 1', 'echo 2', 'echo 3'],
         'j2' : ['echo a', 'echo b', 'echo c'],
     }
+    log.info('')
 
     sbt = JobSubmitter(jobs=d_job, environment='None')
     sbt.run(skip_submit=_skip_submission())
