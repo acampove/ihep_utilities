@@ -38,22 +38,6 @@ class JobSubmitter:
         self._memory      = 4000
         self._queue       = 'mid'
         self._submitter_command = 'submit_run_commands'
-
-        self._tmp_dir     = self._get_tmp_dir()
-    # ----------------------
-    def _get_tmp_dir(self) -> str:
-        '''
-        Returns
-        -------------
-        Path to directory where temporary outputs, e.g. list of jobs, will go
-        '''
-        user    = os.environ['USER']
-        tmp_dir = f'/tmp/{user}/ihep_jobs'
-        os.makedirs(tmp_dir, exist_ok=True)
-
-        log.debug(f'Using temporary directory: {tmp_dir}')
-
-        return tmp_dir
     # ----------------------
     def _validate_jobs(self, jobs : dict[str,list[str]]) -> None:
         '''
