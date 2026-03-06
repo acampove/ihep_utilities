@@ -32,3 +32,33 @@ jmanager -m 8000 -t 0
 ```
 
 `-t 1` will do a test run.
+
+## Job sumission
+
+To submit arrays of jobs to HTCondor in IHEP do:
+
+```python
+from ihep_utilities import JobSubmitter
+
+d_job = {
+    'j1' : ['echo 1', 'echo 2', 'echo 3'],
+    'j2' : ['echo a', 'echo b', 'echo c'],
+}
+
+sbt = JobSubmitter(jobs=d_job, environment='None')
+sbt.run(skip_submit=False)
+```
+
+Where 
+
+- The `j1`, `j2`, etc can be replaced with the user's commands
+- `environment` is the user's conda environment where this will run
+- `skip_submit` can be `True` for dry runs.
+
+The outputs will go to:
+
+```
+/publicfs/ucas/user/campoverde/Jobs/run_commands
+```
+
+but this can be changed with `JobsSubmitter._log_root`
