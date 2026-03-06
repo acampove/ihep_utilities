@@ -1,0 +1,24 @@
+image: continuumio/miniconda3:latest
+
+stages:
+  - test
+  - install 
+  - publish
+
+install:
+  stage : install
+  script:
+    - conda create --name env python=3.13 -y
+    - source activate env 
+    - pip install .
+
+publish:
+  stage: publish
+  only:
+    - tags
+  script:
+    - conda create --name env python=3.13 -y
+    - source activate env 
+    - pip install build twine
+    - python -m build
+    - twine upload dist/* -u "$PYPI_USERNAME" -p "$PYPI_PASSWORD"
