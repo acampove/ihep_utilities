@@ -166,7 +166,10 @@ class JobSubmitter:
         '''
         job_date = self._get_job_date()
 
+        summary : dict[str,int] = dict()
         for kind, l_command in self._jobs.items():
+            summary[kind] = len(l_command)
+
             job_dir = f'{JobSubmitter._log_root}/{kind}/{job_date}'
             os.makedirs(job_dir, exist_ok=True)
             os.chdir(job_dir)
@@ -180,4 +183,10 @@ class JobSubmitter:
                 commands   = l_command)
 
         log.info('Submission finished')
+
+        log.info(40 * '-')
+        log.info(f'{"Kind":<20}{"#Jobs":<20}')
+        log.info(40 * '-')
+        for kind, njobs in summary.items():
+            log.info(f'{kind:<20}{njobs:<20}')
 # -----------------------------
